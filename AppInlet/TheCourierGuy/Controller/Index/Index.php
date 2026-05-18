@@ -2,14 +2,31 @@
 
 namespace AppInlet\TheCourierGuy\Controller\Index;
 
-use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\View\Result\Page;
 
-class Index extends Action
+class Index implements ActionInterface
 {
+    /**
+     * @var ResultFactory
+     */
+    protected $resultFactory;
+
+    /**
+     * @param ResultFactory $resultFactory
+     */
+    public function __construct(ResultFactory $resultFactory)
+    {
+        $this->resultFactory = $resultFactory;
+    }
+
+    /**
+     * @return Page|ResultInterface
+     */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }

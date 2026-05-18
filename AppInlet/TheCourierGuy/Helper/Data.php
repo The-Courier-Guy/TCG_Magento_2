@@ -9,34 +9,21 @@ namespace AppInlet\TheCourierGuy\Helper;
 use Exception;
 use Magento\Framework\App\Cache\Frontend\Pool;
 use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\PageCache\Version;
 use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface;
 use AppInlet\TheCourierGuy\Plugin\ShipLogicApiPayload;
 
 class Data extends AbstractHelper
 {
-    public const XML_PATH_CATALOG = 'carriers/';
+    public const string XML_PATH_CATALOG = 'carriers/';
 
-    /**
-     * @var WriterInterface
-     */
-    protected $configWriter;
+    protected WriterInterface $configWriter;
     protected LoggerInterface $logger;
-
-    /**
-     * @var TypeListInterface
-     */
-    protected $cacheTypeList;
-
-    /**
-     * @var Pool
-     */
-    protected $cacheFrontendPool;
+    protected TypeListInterface $cacheTypeList;
+    protected Pool $cacheFrontendPool;
     protected ShipLogicApiPayload $shipLogicApiPayload;
 
     /**
@@ -71,7 +58,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    public function getConfigValue($field, $storeId = null)
+    public function getConfigValue($field, $storeId = null): string
     {
         if ($fieldValue = $this->scopeConfig->getValue(
             $field,
@@ -91,7 +78,7 @@ class Data extends AbstractHelper
      *
      * @return string
      */
-    public function getConfig($code, $storeId = null)
+    public function getConfig($code, $storeId = null): string
     {
         return $this->getConfigValue(self::XML_PATH_CATALOG . "appinlet_the_courier_guy/" . $code, $storeId);
     }
@@ -100,7 +87,7 @@ class Data extends AbstractHelper
      * @param $code
      * @param $value
      */
-    public function SetConfigData($code, $value)
+    public function SetConfigData($code, $value): void
     {
         $path = self::XML_PATH_CATALOG . "appinlet_the_courier_guy/" . $code;
         try {
@@ -114,7 +101,7 @@ class Data extends AbstractHelper
     /**
      * Flush config cache
      */
-    public function flushCache()
+    public function flushCache(): void
     {
         $_types = [
             'config'

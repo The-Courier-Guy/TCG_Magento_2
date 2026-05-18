@@ -34,7 +34,7 @@ class ApiPlug
         $this->shipLogic = $shipLogic;
     }
 
-    public function prepare_api_data($request, $itemsList, $quote, $reference, array $insuranceData = [])
+    public function prepare_api_data($request, $itemsList, $quote, $reference, array $insuranceData = []): array
     {
         $request['region'] = $quote->getShippingAddress()->getRegion();
 
@@ -52,7 +52,7 @@ class ApiPlug
             'destperadd1'    => $request['street'],
             'destperadd2'    => '',
             'destperadd3'    => $request['city'],
-            'destperadd4'    => $request['region'],
+            'destperadd4'    => !empty($request['region']) ? $request['region'] : '',
             'destperphone'   => $tel,
             'destpercell'    => $tel,
             'destpers'       => $firstName . " " . $lastName,

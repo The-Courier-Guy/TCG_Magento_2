@@ -30,7 +30,7 @@ class OrderShipped implements ObserverInterface
      * @throws GuzzleException
      * @throws FileSystemException
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         if ($this->helper->getConfig('disable_tcg_shipment_at_create_shipment') === "1") {
             return;

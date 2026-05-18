@@ -2,22 +2,24 @@
 
 namespace AppInlet\TheCourierGuy\Setup;
 
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Zend_Db_Exception;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
+     *
+     * @throws Zend_Db_Exception
      */
     public function upgrade(
         SchemaSetupInterface $setup,
         ModuleContextInterface $context
-    ) {
+    ): void{
         $setup->startSetup();
 
         if (!$setup->getConnection()->isTableExists('appinlet_theCourierguy_shipping')) {
@@ -39,7 +41,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->endSetup();
     }
 
-    protected function installShipmentTable(SchemaSetupInterface $setup)
+    /**
+     * @throws Zend_Db_Exception
+     */
+    protected function installShipmentTable(SchemaSetupInterface $setup): void
     {
         $table = $setup->getConnection()->newTable(
             $setup->getTable('appinlet_theCourierguy_shipping')

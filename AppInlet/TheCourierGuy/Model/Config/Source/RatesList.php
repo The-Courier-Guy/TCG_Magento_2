@@ -6,7 +6,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class RatesList implements OptionSourceInterface
 {
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             ['value' => '', 'label' => __('Select Options')],

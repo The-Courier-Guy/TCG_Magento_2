@@ -7,9 +7,7 @@ interface PlacesByNameInterface
     /**
      * GET for Post api
      *
-     *
-     *
-     * @return string[]
+     * @return array|bool|string
      */
-    public function getPlacesByName();
+    public function getPlacesByName(): array|bool|string;
 }

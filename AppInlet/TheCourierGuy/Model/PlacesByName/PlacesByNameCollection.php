@@ -1,9 +1,5 @@
 <?php
 
-/**
- *
- */
-
 namespace AppInlet\TheCourierGuy\Model\PlacesByName;
 
 use AppInlet\TheCourierGuy\Api\PlacesByNameInterface;
@@ -16,15 +12,11 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class PlacesByNameCollection implements PlacesByNameInterface
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
+    protected StoreManagerInterface $_storeManager;
 
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $_storeManager;
+    public ApiPlug $apiPlug;
+    public Request $request;
 
     public function __construct(
         Request $request,
@@ -45,7 +37,10 @@ class PlacesByNameCollection implements PlacesByNameInterface
         return $this->scopeConfig->getValue("carriers/appinlet_the_courier_guy/$field", $storeScope);
     }
 
-    public function getPlacesByName()
+    /**
+     * @throws LocalizedException
+     */
+    public function getPlacesByName(): array|bool|string
     {
         $payload = json_decode($this->request->getContent(), true);
 
@@ -56,15 +51,13 @@ class PlacesByNameCollection implements PlacesByNameInterface
         }
 
         $places = $this->apiPlug->getAllPlacesByName($payload['place_name']);
-        if ($this->getConfig("disable_boxes_depot") == 1) {
-            if (count($places) >= 1) {
-                $replaceTerms = ['boxes', 'depot'];
-                foreach ($places as $key => $place) {
-                    $town = strtolower($place['town']);
-                    foreach ($replaceTerms as $term) {
-                        if (str_contains($town, $term)) {
-                            unset($places[$key]);
-                        }
+        if ($this->getConfig("disable_boxes_depot") == 1 && count($places) >= 1) {
+            $replaceTerms = ['boxes', 'depot'];
+            foreach ($places as $key => $place) {
+                $town = strtolower($place['town']);
+                foreach ($replaceTerms as $term) {
+                    if (str_contains($town, $term)) {
+                        unset($places[$key]);
                     }
                 }
             }

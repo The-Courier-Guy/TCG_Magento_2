@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0](https://github.com/The-Courier-Guy/TCG_Magento_2/releases/tag/v1.5.0)
+
+### Changed
+
+- Updated 'https://api.thecourierguy.co.za/v2/' to 'https://api.portal.thecourierguy.co.za/v2/'.
+- Modernised codebase with PHP 8+ type declarations for improved type safety and performance.
+- Updated property declarations to use typed properties throughout the codebase.
+- Resolved deprecated class usage by replacing legacy classes with their modern equivalents.
+
 ## [1.4.0](https://github.com/The-Courier-Guy/TCG_Magento_2/releases/tag/v1.4.0)
 
 ### Added

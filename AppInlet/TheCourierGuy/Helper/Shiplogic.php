@@ -5,19 +5,16 @@ namespace AppInlet\TheCourierGuy\Helper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
-use Magento\Framework\App\Cache\Frontend\Pool;
-use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\Framework\App\Helper\Context;
 use stdClass;
-use AppInlet\TheCourierGuy\Model\Carrier\ShipmentProcessor;
 
 class Shiplogic extends Data
 {
-    public const API_BASE = 'https://api.shiplogic.com/v2/';
-    private $sender;
-    private $receiver;
-    private $apiMethods = [
+    public const API_BASE = 'https://api.portal.thecourierguy.co.za/v2/';
+
+    /**
+     * @var array<string, array{method: string, endPoint: string}>
+     * */
+    private array $apiMethods = [
         'getRates'         => [
             'method'   => 'POST',
             'endPoint' => self::API_BASE . 'rates',
@@ -45,6 +42,8 @@ class Shiplogic extends Data
     ];
 
     /**
+     * Performs the shiplogic API request
+     *
      * @param string $apiMethod
      * @param array $data
      *
@@ -89,6 +88,8 @@ class Shiplogic extends Data
     }
 
     /**
+     * Retrieves the opt-in rates from ShipLogic API
+     *
      * @param array $package
      * @param array $parameters
      *
@@ -97,11 +98,11 @@ class Shiplogic extends Data
      */
     public function getOptInRates(array $package, array $parameters): array
     {
-        $this->sender             = $this->getAddressDetail($parameters);
-        $this->receiver           = $this->getAddressDetail($package);
+        $sender                   = $this->getAddressDetail($parameters);
+        $receiver                 = $this->getAddressDetail($package);
         $body                     = new stdClass();
-        $body->collection_address = $this->sender;
-        $body->delivery_address   = $this->receiver;
+        $body->collection_address = $sender;
+        $body->delivery_address   = $receiver;
         $hash                     = 'tcg_optin_' . hash('sha256', serialize($body));
         $optInRates               = get_transient($hash);
         if ($optInRates) {
@@ -124,10 +125,12 @@ class Shiplogic extends Data
     }
 
     /**
+     * Retrieves the rates from ShipLogic API
+     *
      * @param array $parameters
      *
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function getRates(array $parameters): array
     {
@@ -194,7 +197,13 @@ class Shiplogic extends Data
         }
     }
 
-    public function removeTrailingComma($string)
+    /**
+     * Removes trailing comma from a string
+     *
+     * @param string $string
+     * @return string
+     * */
+    public function removeTrailingComma(string $string): string
     {
         $lastOccurrence = strrpos($string, ', ');
 
@@ -206,6 +215,8 @@ class Shiplogic extends Data
     }
 
     /**
+     * Creates a shipment via ShipLogic API
+     *
      * @param object $body
      *
      * @return string
@@ -216,12 +227,22 @@ class Shiplogic extends Data
         return $this->makeAPIRequest('createShipment', ['body' => json_encode($body)]);
     }
 
+    /**
+     * Retrieves shipment details via ShipLogic API
+     *
+     * @param int $id
+     * @return string
+     *
+     * @throws GuzzleException
+     */
     public function getShipmentLabel(int $id): string
     {
         return $this->makeAPIRequest('getShipmentLabel', ['param' => $id]);
     }
 
     /**
+     * Retrieves ShipLogic API credentials from configuration
+     *
      * @return array
      */
     protected function getShipLogicCredentials(): array
@@ -232,11 +253,13 @@ class Shiplogic extends Data
     }
 
     /**
-     * @param $parameters
+     * Converts parameters to address detail object
+     *
+     * @param array $parameters
      *
      * @return stdClass
      */
-    public function getAddressDetail($parameters): stdClass
+    public function getAddressDetail(array $parameters): stdClass
     {
         $addressDetail                 = new stdClass();
         $addressDetail->company        = $parameters['company'];
