@@ -6,17 +6,24 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Zend_Db_Exception;
 
 class InstallSchema implements InstallSchemaInterface
 {
-    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    /**
+     * @throws Zend_Db_Exception
+     */
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context): void
     {
         $setup->startSetup();
         $this->installShipmentTable($setup);
         $setup->endSetup();
     }
 
-    protected function installShipmentTable(SchemaSetupInterface $setup)
+    /**
+     * @throws Zend_Db_Exception
+     */
+    protected function installShipmentTable(SchemaSetupInterface $setup): void
     {
         $table = $setup->getConnection()->newTable(
             $setup->getTable('appinlet_theCourierguy_shipping')

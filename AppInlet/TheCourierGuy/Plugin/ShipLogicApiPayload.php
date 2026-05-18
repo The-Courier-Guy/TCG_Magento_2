@@ -6,7 +6,7 @@ class ShipLogicApiPayload
 {
     public static $r1;
     public static $j;
-    public $globalFactor = 50;
+    public int $globalFactor = 50;
 
     /**
      * @param int $globalFactor
@@ -22,7 +22,7 @@ class ShipLogicApiPayload
      *
      * @return array
      */
-    public function getContentsPayload($parameters, $items)
+    public function getContentsPayload($parameters, $items): array
     {
         self::$r1 = $r2 = [];
 
@@ -43,14 +43,6 @@ class ShipLogicApiPayload
          * Global parcels don't apply
          */
         $singleItems = [];
-
-        /**
-         * Items that don't fit into any of the defined parcel sizes
-         * are each passed as a lumped item with their own dimension and mass
-         *
-         * Now check if there are items that don't fit into any box
-         */
-        $i = 0;
 
         list($tooBigItems, $fittingItems, $fitsFlyer) = $this->getFittingItems(
             $all_items,
@@ -88,8 +80,8 @@ class ShipLogicApiPayload
 
         unset($fittingItems);
 
-        foreach ($r2 as $itemm) {
-            self::$r1[] = $itemm;
+        foreach ($r2 as $item) {
+            self::$r1[] = $item;
         }
 
         self::$r1['fitsFlyer'] = $fitsFlyer;
@@ -105,9 +97,9 @@ class ShipLogicApiPayload
      *
      * @return array
      */
-    private function getGlobalParcels($parameters)
+    private function getGlobalParcels($parameters): array
     {
-        $globalParcells = [];
+        $globalParcels = [];
         $defaultProduct = [];
         for ($i = 1; $i < 7; $i++) {
             $globalParcel              = [];
@@ -120,7 +112,7 @@ class ShipLogicApiPayload
                 $globalParcel[2] = $product_height_per_parcel !== '' ? (int)$product_height_per_parcel : 50;
                 rsort($globalParcel);
                 $globalParcel['volume'] = $globalParcel[0] * $globalParcel[1] * $globalParcel[2];
-                $globalParcells[0]      = $globalParcel;
+                $globalParcels[0]      = $globalParcel;
             } else {
                 $skip = false;
                 if ($product_length_per_parcel === '') {
@@ -138,25 +130,25 @@ class ShipLogicApiPayload
                     $globalParcel[2] = (int)$product_height_per_parcel;
                     rsort($globalParcel);
                     $globalParcel['volume'] = $globalParcel[0] * $globalParcel[1] * $globalParcel[2];
-                    $globalParcells[$i - 1] = $globalParcel;
+                    $globalParcels[$i - 1] = $globalParcel;
                 }
             }
         }
 
         // Get a default product size to use where dimensions are not configured
-        $globalParcelCount = count($globalParcells);
+        $globalParcelCount = count($globalParcels);
         if ($globalParcelCount == 1) {
-            $defaultProduct = $globalParcells[0];
-        } elseif (isset($globalParcells[1])) {
-            $defaultProduct = $globalParcells[1];
+            $defaultProduct = $globalParcels[0];
+        } elseif (isset($globalParcels[1])) {
+            $defaultProduct = $globalParcels[1];
         }
 
-        $globalFlyer = $globalParcells[0];
+        $globalFlyer = $globalParcels[0];
 
         // Order the global parcels by largest dimension ascending order
-        if (count($globalParcells) > 1) {
+        if (count($globalParcels) > 1) {
             usort(
-                $globalParcells,
+                $globalParcels,
                 function ($a, $b) {
                     if ($a[0] === $b[0]) {
                         return 0;
@@ -168,15 +160,15 @@ class ShipLogicApiPayload
         }
 
         return [
-            $globalParcells,
+            $globalParcels,
             $defaultProduct,
             $globalFlyer,
         ];
     }
 
-    private function getAllItems($items, $defaultProduct)
+    private function getAllItems($items, $defaultProduct): array
     {
-        $all_itemms = [];
+        $all_items = [];
         foreach ($items as $item) {
             $itm                         = [];
             $itm['item']                 = $item;
@@ -197,13 +189,13 @@ class ShipLogicApiPayload
                 );
             }
             $itm['slug']              = $item['name'] ?? 'Product';
-            $all_itemms[$item['key']] = $itm;
+            $all_items[$item['key']] = $itm;
         }
 
-        return $all_itemms;
+        return $all_items;
     }
 
-    private function getFittingItems($all_items, $globalParcels, $globalFlyer)
+    private function getFittingItems($all_items, $globalParcels, $globalFlyer): array
     {
         $tooBigItems  = [];
         $fittingItems = [];
@@ -263,7 +255,7 @@ class ShipLogicApiPayload
         ];
     }
 
-    private function fitSingleItems($singleItems, $globalFlyer, &$fitsFlyer)
+    private function fitSingleItems($singleItems, $globalFlyer, &$fitsFlyer): int
     {
         $j = 0;
 
@@ -296,7 +288,7 @@ class ShipLogicApiPayload
         return $j;
     }
 
-    private function fitToobigItems($tooBigItems, $j)
+    private function fitToobigItems($tooBigItems, $j): int
     {
         foreach ($tooBigItems as $tooBigItem) {
             $j++;
@@ -334,7 +326,7 @@ class ShipLogicApiPayload
         return $j;
     }
 
-    private function array_flatten($array)
+    private function array_flatten($array): array
     {
         $flat = [];
         foreach ($array as $key => $value) {
@@ -343,9 +335,7 @@ class ShipLogicApiPayload
                 array_push($flat, $val);
             }
         }
-        $u = array_unique($flat);
-
-        return $u;
+        return array_unique($flat);
     }
 
     /**
@@ -357,7 +347,7 @@ class ShipLogicApiPayload
      * @param $fittingItems
      * @param $items
      */
-    private function poolIfPossible(&$fittingItems)
+    private function poolIfPossible(&$fittingItems): void
     {
         $pools = [];
 
@@ -417,7 +407,7 @@ class ShipLogicApiPayload
      *
      * @return array
      */
-    private function doesFitGlobalParcels($item, $globalParcels)
+    private function doesFitGlobalParcels($item, $globalParcels): array
     {
         $globalParcelIndex = 0;
         foreach ($globalParcels as $globalParcel) {
@@ -437,7 +427,7 @@ class ShipLogicApiPayload
      *
      * @return bool
      */
-    private function doesFitParcel($item, $parcel)
+    private function doesFitParcel($item, $parcel): bool
     {
         // Parcel now has volume as element - need to drop before sorting
         unset($parcel['volume']);

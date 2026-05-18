@@ -6,10 +6,7 @@ use Magento\Quote\Api\Data\ShippingMethodExtensionFactory;
 
 class ShippingClasses
 {
-    /**
-     * @var ShippingMethodExtensionFactory
-     */
-    protected $extensionFactory;
+    protected ShippingMethodExtensionFactory $extensionFactory;
 
     /**
      * Description constructor.
@@ -29,7 +26,7 @@ class ShippingClasses
      *
      * @return mixed
      */
-    public function afterModelToDataObject($subject, $result, $rateModel)
+    public function afterModelToDataObject($subject, $result, $rateModel): mixed
     {
         $extensionAttribute = $result->getExtensionAttributes() ?
             $result->getExtensionAttributes()

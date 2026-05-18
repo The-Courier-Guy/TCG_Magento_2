@@ -10,6 +10,7 @@ namespace AppInlet\TheCourierGuy\Sales\Model\Order\Pdf;
 use AppInlet\TheCourierGuy\Model\ShipmentFactory;
 use AppInlet\TheCourierGuy\Plugin\ApiPlug;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\Locale\ResolverInterface;
@@ -39,12 +40,12 @@ class Shipment extends AbstractPdf
     /**
      * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    protected StoreManagerInterface $_storeManager;
 
     /**
      * @var ResolverInterface
      */
-    protected $_localeResolver;
+    protected ResolverInterface $_localeResolver;
     private ApiPlug $apiPlug;
     private Filesystem $fileSystem;
     private ShipmentFactory $shipmentFactory;
@@ -113,7 +114,7 @@ class Shipment extends AbstractPdf
      *
      * @return Zend_Pdf
      */
-    public function getPdf($shipments = [])
+    public function getPdf($shipments = []): Zend_Pdf
     {
         $this->_beforeGetPdf();
         $this->_initRenderer('shipment');
@@ -224,8 +225,9 @@ class Shipment extends AbstractPdf
      * @param array $settings
      *
      * @return Zend_Pdf_Page
+     * @throws LocalizedException
      */
-    public function newPage(array $settings = [])
+    public function newPage(array $settings = []): Zend_Pdf_Page
     {
         /* Add new table head */
         $page                     = $this->_getPdf()->newPage(Zend_Pdf_Page::SIZE_A4);
@@ -244,8 +246,9 @@ class Shipment extends AbstractPdf
      * @param Zend_Pdf_Page $page
      *
      * @return void
+     * @throws LocalizedException
      */
-    protected function _drawHeader(Zend_Pdf_Page $page)
+    protected function _drawHeader(Zend_Pdf_Page $page): void
     {
         /* Add table head */
         $this->_setFontRegular($page, 10);

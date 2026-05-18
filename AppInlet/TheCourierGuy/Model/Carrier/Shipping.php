@@ -11,10 +11,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
-use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote;
@@ -26,12 +25,12 @@ use Psr\Log\LoggerInterface;
 
 class Shipping extends AbstractCarrier implements CarrierInterface
 {
-    protected $code = 'appinlet_the_courier_guy';
+    protected string $code = 'appinlet_the_courier_guy';
 
-    protected $rateResultFactory;
-    protected $rateMethodFactory;
-    protected $quoteFactory;
-    protected $quoteModel;
+    protected ResultFactory $rateResultFactory;
+    protected MethodFactory $rateMethodFactory;
+    protected QuoteFactory $quoteFactory;
+    protected Quote $quoteModel;
     protected ShipmentFactory $shipmentFactory;
     protected Monolog $monolog;
     protected ApiPlug $apiPlug;
@@ -74,12 +73,12 @@ class Shipping extends AbstractCarrier implements CarrierInterface
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
     }
 
-    public function getAllowedMethods()
+    public function getAllowedMethods(): array
     {
         return [$this->code => $this->helper->getConfig('title')];
     }
 
-    public function collectRates(RateRequest $request)
+    public function collectRates(RateRequest $request): DataObject|Result|bool|null
     {
         if (!$this->helper->getConfig('active')) {
             $this->monolog->info("TheCourierGuy plugin is not active");
@@ -189,7 +188,7 @@ class Shipping extends AbstractCarrier implements CarrierInterface
         return $result;
     }
 
-    public function prepareLineItem($item, $packageItemId)
+    public function prepareLineItem($item, $packageItemId): array
     {
         $defaultLength = (float)$this->helper->getConfig('typicallength');
         $defaultWidth  = (float)$this->helper->getConfig('typicalwidth');

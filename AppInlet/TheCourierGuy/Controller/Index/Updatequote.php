@@ -3,32 +3,72 @@
 namespace AppInlet\TheCourierGuy\Controller\Index;
 
 use Exception;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Checkout\Model\Cart;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\ResultInterface;
 
-class Updatequote extends Action
+class Updatequote implements ActionInterface
 {
-    public function execute()
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var Cart
+     */
+    protected $cart;
+
+    /**
+     * @var JsonFactory
+     */
+    protected $jsonResultFactory;
+
+    /**
+     * @var PageFactory
+     */
+    protected $pageResultFactory;
+
+    /**
+     * @param RequestInterface $request
+     * @param Cart $cart
+     * @param JsonFactory $jsonResultFactory
+     * @param PageFactory $pageResultFactory
+     */
+    public function __construct(
+        RequestInterface $request,
+        Cart $cart,
+        JsonFactory $jsonResultFactory,
+        PageFactory $pageResultFactory
+    ) {
+        $this->request = $request;
+        $this->cart = $cart;
+        $this->jsonResultFactory = $jsonResultFactory;
+        $this->pageResultFactory = $pageResultFactory;
+    }
+
+    /**
+     * @return ResultInterface
+     */
+    public function execute(): ResultInterface
     {
-        $objectManager = ObjectManager::getInstance();
-        $post          = $this->getRequest()->getPostValue();
+        $post = $this->request->getPostValue();
+        $jsonResult = $this->jsonResultFactory->create();
 
-        $cart = $objectManager->get('\Magento\Checkout\Model\Cart');
-
-        $quote = $cart->getQuote();
         if (isset($post['place_id'])) {
+            $quote = $this->cart->getQuote();
             $quote->setCourierguyPlaceId($post['place_id']);
             try {
                 $quote->save();
-                echo 'Place Post Success';
-                die();
+                return $jsonResult->setData(['success' => true, 'message' => 'Place Post Success']);
             } catch (Exception $ex) {
-                echo 'Place Post Failed';
+                return $jsonResult->setData(['success' => false, 'message' => 'Place Post Failed']);
             }
         }
 
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-        $this->_view->renderLayout();
+        return $this->pageResultFactory->create();
     }
 }

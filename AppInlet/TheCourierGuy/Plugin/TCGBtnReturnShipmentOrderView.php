@@ -10,7 +10,7 @@ class TCGBtnReturnShipmentOrderView
     /**
      * @param
      */
-    public function beforeSetLayout(OrderView $subject)
+    public function beforeSetLayout(OrderView $subject): void
     {
         $order          = $subject->getOrder();
         $shippingMethod = $order->getShippingMethod();

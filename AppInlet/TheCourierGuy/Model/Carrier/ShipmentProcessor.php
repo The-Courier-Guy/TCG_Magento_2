@@ -3,11 +3,10 @@
 namespace AppInlet\TheCourierGuy\Model\Carrier;
 
 use AppInlet\TheCourierGuy\Helper\Shiplogic;
-use AppInlet\TheCourierGuy\Logger\Logger as Monolog;
 use AppInlet\TheCourierGuy\Observer\TCGQuote;
 use AppInlet\TheCourierGuy\Plugin\ApiPlug;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
@@ -19,53 +18,26 @@ use stdClass;
 
 class ShipmentProcessor
 {
-    /**
-     * @var ShipmentRepositoryInterface
-     */
     private ShipmentRepositoryInterface $shipmentRepository;
-    /**
-     * @var ShipmentTrackInterfaceFactory
-     */
     private ShipmentTrackInterfaceFactory $trackFactory;
-    /**
-     * @var Helper
-     */
     private Helper $helper;
-    /**
-     * @var TCGQuote
-     */
     private TCGQuote $tcgQuote;
-    /**
-     * @var ApiPlug
-     */
     private ApiPlug $apiPlug;
-    /**
-     * @var Shiplogic
-     */
     private Shiplogic $shipLogic;
-    /**
-     * @var Filesystem
-     */
     private Filesystem $filesystem;
-    /**
-     * @var DirectoryList
-     */
     private DirectoryList $directoryList;
-    /**
-     * @var ShipmentSender
-     */
     private ShipmentSender $shipmentSender;
 
     /**
      * @param ShipmentRepositoryInterface $shipmentRepository
      * @param ShipmentTrackInterfaceFactory $trackFactory
-     * @param Monolog $monolog
      * @param Helper $helper
      * @param Shiplogic $shipLogic
      * @param TCGQuote $tcgQuote
      * @param ApiPlug $apiPlug
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
+     * @param ShipmentSender $shipmentSender
      */
     public function __construct(
         ShipmentRepositoryInterface $shipmentRepository,
@@ -95,7 +67,7 @@ class ShipmentProcessor
      *
      * @return string
      */
-    public function getWaybillLink($shiplogicApi, $shipmentId)
+    public function getWaybillLink($shiplogicApi, $shipmentId): string
     {
         $url = '';
         try {
@@ -192,7 +164,7 @@ class ShipmentProcessor
     }
 
     /**
-     * @throws GuzzleException
+     * @throws GuzzleException|FileSystemException
      */
     public function buildShipment($order, $observerShipment): void
     {

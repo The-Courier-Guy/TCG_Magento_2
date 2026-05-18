@@ -2,13 +2,13 @@
 
 namespace AppInlet\TheCourierGuy\Controller\AdminHtml\Order;
 
-use AppInlet\TheCourierGuy\Helper\Data as Helper;
 use AppInlet\TheCourierGuy\Model\Carrier\ShipmentProcessor;
 use GuzzleHttp\Exception\GuzzleException;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Registry;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Result\LayoutFactory;
@@ -17,6 +17,9 @@ use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
 
 class Index extends Order
 {
@@ -34,7 +37,6 @@ class Index extends Order
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
-        Helper $helper,
         ShipmentProcessor $shipmentProcessor,
     ) {
         $this->logger = $logger;
@@ -54,7 +56,7 @@ class Index extends Order
         );
     }
 
-    public function execute()
+    public function execute(): ResultInterface|ResponseInterface|Redirect
     {
         $order = $this->_initOrder();
         if ($order) {
@@ -62,6 +64,11 @@ class Index extends Order
                 $this->shipmentProcessor->buildShipment($order, null);
                 $this->messageManager->addSuccessMessage(__('Return TCG Shipment processed!'));
             } catch (GuzzleException $e) {
+                $this->messageManager->addErrorMessage(
+                    __('We can\'t process your Return TCG Shipment request' . $e->getMessage())
+                );
+                $this->logger->critical($e);
+            } catch (FileSystemException $e){
                 $this->messageManager->addErrorMessage(
                     __('We can\'t process your Return TCG Shipment request' . $e->getMessage())
                 );

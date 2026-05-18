@@ -8,16 +8,12 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 class Collection extends AbstractCollection
 {
     /**
-     * Init
-     */
-
-    /**
      * @var string
      */
     protected $_idFieldName = 'entity_id';
 
 
-    protected function _construct() // phpcs:ignore PSR2.Methods.MethodDeclaration
+    protected function _construct(): void // phpcs:ignore PSR2.Methods.MethodDeclaration
     {
         $this->_init(
             \AppInlet\TheCourierGuy\Model\Shipment::class,

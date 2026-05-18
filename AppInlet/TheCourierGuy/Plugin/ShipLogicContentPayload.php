@@ -30,7 +30,7 @@ class ShipLogicContentPayload
     private static function getMaxPackingConfiguration(
         $parcel,
         $package
-    ) {
+    ): mixed{
         $boxPermutations = [
             [0, 1, 2],
             [0, 2, 1],
@@ -62,7 +62,7 @@ class ShipLogicContentPayload
         $parcel,
         $package,
         $count
-    ) {
+    ): mixed{
         $boxPermutations = [
             [0, 1, 2],
             [0, 2, 1],
@@ -92,7 +92,7 @@ class ShipLogicContentPayload
         $parcel,
         $package,
         $count
-    ) {
+    ): array{
         $boxPermutations = [
             [0, 1, 2],
             [0, 2, 1],
@@ -152,7 +152,7 @@ class ShipLogicContentPayload
         return $remainingBoxes;
     }
 
-    public function calculate_single_fitting_items_packing(&$r1, &$j)
+    public function calculate_single_fitting_items_packing(&$r1, &$j): void
     {
         $parameters_in    = $this->parameters;
         $fittingItems_in  = $this->fittingItems;
@@ -223,7 +223,7 @@ class ShipLogicContentPayload
         }
     }
 
-    public function calculate_multi_fitting_items_basic()
+    public function calculate_multi_fitting_items_basic(): array
     {
         global $j;
         $parameters_in    = $this->parameters;
@@ -454,7 +454,7 @@ class ShipLogicContentPayload
     }
 
 
-    private function fitItemsInVbox($vbox, &$items1, &$entry)
+    private function fitItemsInVbox($vbox, &$items1, &$entry): void
     {
         for ($itemi = 0; $itemi < count($items1); $itemi++) {
             $itemvb = $items1[$itemi];
@@ -500,7 +500,7 @@ class ShipLogicContentPayload
         $fits,
         $slug,
         $itemCount
-    ) {
+    ): int|string{
         $fitsSlug = 0;
         foreach ($fits as $key => $fit) {
             $fitsSlug = $key;
