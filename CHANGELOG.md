@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.1](https://github.com/The-Courier-Guy/TCG_Magento_2/releases/tag/v1.5.1)
+
+### Added
+
+- Added new courier service level codes: LPP, LPF, PRI, PRIR and LSP.
+
 ## [1.5.0](https://github.com/The-Courier-Guy/TCG_Magento_2/releases/tag/v1.5.0)
 
 ### Changed

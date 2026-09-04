@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Copyright © 2025 App Inlet (Pty) Ltd. All rights reserved.
- * See COPYING.txt for license details.
- */
-
 namespace AppInlet\TheCourierGuy\Sales\Model\Order\Pdf;
 
 use AppInlet\TheCourierGuy\Model\ShipmentFactory;

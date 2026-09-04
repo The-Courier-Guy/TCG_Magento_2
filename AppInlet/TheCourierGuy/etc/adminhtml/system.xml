@@ -1,10 +1,4 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Copyright © 2025 App Inlet (Pty) Ltd. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
@@ -411,7 +405,7 @@
 
                 <group id="courier_guy_AIR" type="text" sortOrder="4050" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy AIR: Fuel charge</label>
+                    <label>The Courier Guy - AIR</label>
                     <field id="shipping_label_name_AIR" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -439,7 +433,7 @@
 
                 <group id="courier_guy_ECO" type="text" sortOrder="4100" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy ECO: Fuel charge</label>
+                    <label>The Courier Guy - ECO</label>
                     <field id="shipping_label_name_ECO" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -467,7 +461,7 @@
 
                 <group id="courier_guy_ECOB" type="text" sortOrder="4150" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy ECOB: Fuel charge</label>
+                    <label>The Courier Guy - ECOB</label>
                     <field id="shipping_label_name_ECOB" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -495,7 +489,7 @@
 
                 <group id="courier_guy_ECOR" type="text" sortOrder="4200" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy ECOR: Fuel charge</label>
+                    <label>The Courier Guy - ECOR</label>
                     <field id="shipping_label_name_ECOR" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -523,7 +517,7 @@
 
                 <group id="courier_guy_ECORB" type="text" sortOrder="4250" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy ECORB: Fuel charge</label>
+                    <label>The Courier Guy - ECORB</label>
                     <field id="shipping_label_name_ECORB" translate="label" type="text" sortOrder="500"
                            showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -551,7 +545,7 @@
 
                 <group id="courier_guy_INN" type="text" sortOrder="4300" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy INN: Fuel charge</label>
+                    <label>The Courier Guy - INN</label>
                     <field id="shipping_label_name_INN" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -579,7 +573,7 @@
 
                 <group id="courier_guy_LLS" type="text" sortOrder="4350" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy LLS: Fuel charge</label>
+                    <label>The Courier Guy - LLS</label>
                     <field id="shipping_label_name_LLS" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -607,7 +601,7 @@
 
                 <group id="courier_guy_LLX" type="text" sortOrder="4400" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy LLX: Fuel charge</label>
+                    <label>The Courier Guy - LLX</label>
                     <field id="shipping_label_name_LLX" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -635,7 +629,7 @@
 
                 <group id="courier_guy_LOF" type="text" sortOrder="4450" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy LOF: Fuel charge</label>
+                    <label>The Courier Guy - LOF</label>
                     <field id="shipping_label_name_LOF" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -661,9 +655,37 @@
                     </depends>
                 </group>
 
+                <group id="courier_guy_LPF" type="text" sortOrder="4475" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>The Courier Guy - LPF</label>
+                    <field id="shipping_label_name_LPF" translate="label" type="text" sortOrder="500" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Shipping label name</label>
+                        <comment>Set the custom label to be used for the shipping label</comment>
+                    </field>
+
+                    <field id="pricing_type_LPF" translate="label" type="select" sortOrder="600" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Pricing Type</label>
+                        <source_model>AppInlet\TheCourierGuy\Model\Config\Source\CustomRatePricingOptions</source_model>
+                        <comment>Set the custom pricing type to be used for the shipping type</comment>
+                    </field>
+
+                    <field id="custom_rate_LPF" translate="label" type="text" sortOrder="700" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Rate</label>
+                        <comment>Set the custom rate to be used for the shipping type</comment>
+                        <validate>validate-number</validate>
+                    </field>
+
+                    <depends>
+                        <field id="enable_custom_labels_and_pricing">1</field>
+                    </depends>
+                </group>
+
                 <group id="courier_guy_LOX" type="text" sortOrder="4500" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy LOX: Fuel charge</label>
+                    <label>The Courier Guy - LOX</label>
                     <field id="shipping_label_name_LOX" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -689,9 +711,37 @@
                     </depends>
                 </group>
 
+                <group id="courier_guy_LPP" type="text" sortOrder="4525" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>The Courier Guy - LPP</label>
+                    <field id="shipping_label_name_LPP" translate="label" type="text" sortOrder="500" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Shipping label name</label>
+                        <comment>Set the custom label to be used for the shipping label</comment>
+                    </field>
+
+                    <field id="pricing_type_LPP" translate="label" type="select" sortOrder="600" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Pricing Type</label>
+                        <source_model>AppInlet\TheCourierGuy\Model\Config\Source\CustomRatePricingOptions</source_model>
+                        <comment>Set the custom pricing type to be used for the shipping type</comment>
+                    </field>
+
+                    <field id="custom_rate_LPP" translate="label" type="text" sortOrder="700" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Rate</label>
+                        <comment>Set the custom rate to be used for the shipping type</comment>
+                        <validate>validate-number</validate>
+                    </field>
+
+                    <depends>
+                        <field id="enable_custom_labels_and_pricing">1</field>
+                    </depends>
+                </group>
+
                 <group id="courier_guy_LSE" type="text" sortOrder="4550" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy LSE: Fuel charge</label>
+                    <label>The Courier Guy - LSE</label>
                     <field id="shipping_label_name_LSE" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -717,9 +767,37 @@
                     </depends>
                 </group>
 
+                <group id="courier_guy_LSP" type="text" sortOrder="4575" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>The Courier Guy - LSP</label>
+                    <field id="shipping_label_name_LSP" translate="label" type="text" sortOrder="500" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Shipping label name</label>
+                        <comment>Set the custom label to be used for the shipping label</comment>
+                    </field>
+
+                    <field id="pricing_type_LSP" translate="label" type="select" sortOrder="600" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Pricing Type</label>
+                        <source_model>AppInlet\TheCourierGuy\Model\Config\Source\CustomRatePricingOptions</source_model>
+                        <comment>Set the custom pricing type to be used for the shipping type</comment>
+                    </field>
+
+                    <field id="custom_rate_LSP" translate="label" type="text" sortOrder="700" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Rate</label>
+                        <comment>Set the custom rate to be used for the shipping type</comment>
+                        <validate>validate-number</validate>
+                    </field>
+
+                    <depends>
+                        <field id="enable_custom_labels_and_pricing">1</field>
+                    </depends>
+                </group>
+
                 <group id="courier_guy_LSF" type="text" sortOrder="4600" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy LSF: Fuel charge</label>
+                    <label>The Courier Guy - LSF</label>
                     <field id="shipping_label_name_LSF" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -747,7 +825,7 @@
 
                 <group id="courier_guy_LSX" type="text" sortOrder="4650" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy LSX: Fuel charge</label>
+                    <label>The Courier Guy - LSX</label>
                     <field id="shipping_label_name_LSX" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -775,7 +853,7 @@
 
                 <group id="courier_guy_NFS" type="text" sortOrder="4700" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy NFS: Fuel charge</label>
+                    <label>The Courier Guy - NFS</label>
                     <field id="shipping_label_name_NFS" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -803,7 +881,7 @@
 
                 <group id="courier_guy_OVN" type="text" sortOrder="4750" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy OVN: Fuel charge</label>
+                    <label>The Courier Guy - OVN</label>
                     <field id="shipping_label_name_OVN" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -829,9 +907,37 @@
                     </depends>
                 </group>
 
+                <group id="courier_guy_PRI" type="text" sortOrder="4775" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>The Courier Guy - PRI</label>
+                    <field id="shipping_label_name_PRI" translate="label" type="text" sortOrder="500" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Shipping label name</label>
+                        <comment>Set the custom label to be used for the shipping label</comment>
+                    </field>
+
+                    <field id="pricing_type_PRI" translate="label" type="select" sortOrder="600" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Pricing Type</label>
+                        <source_model>AppInlet\TheCourierGuy\Model\Config\Source\CustomRatePricingOptions</source_model>
+                        <comment>Set the custom pricing type to be used for the shipping type</comment>
+                    </field>
+
+                    <field id="custom_rate_PRI" translate="label" type="text" sortOrder="700" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Rate</label>
+                        <comment>Set the custom rate to be used for the shipping type</comment>
+                        <validate>validate-number</validate>
+                    </field>
+
+                    <depends>
+                        <field id="enable_custom_labels_and_pricing">1</field>
+                    </depends>
+                </group>
+
                 <group id="courier_guy_OVNR" type="text" sortOrder="4800" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy OVNR: Fuel charge</label>
+                    <label>The Courier Guy - OVNR</label>
                     <field id="shipping_label_name_OVNR" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -857,9 +963,37 @@
                     </depends>
                 </group>
 
+                <group id="courier_guy_PRIR" type="text" sortOrder="4825" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>The Courier Guy - PRIR</label>
+                    <field id="shipping_label_name_PRIR" translate="label" type="text" sortOrder="500" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Shipping label name</label>
+                        <comment>Set the custom label to be used for the shipping label</comment>
+                    </field>
+
+                    <field id="pricing_type_PRIR" translate="label" type="select" sortOrder="600" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Pricing Type</label>
+                        <source_model>AppInlet\TheCourierGuy\Model\Config\Source\CustomRatePricingOptions</source_model>
+                        <comment>Set the custom pricing type to be used for the shipping type</comment>
+                    </field>
+
+                    <field id="custom_rate_PRIR" translate="label" type="text" sortOrder="700" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Rate</label>
+                        <comment>Set the custom rate to be used for the shipping type</comment>
+                        <validate>validate-number</validate>
+                    </field>
+
+                    <depends>
+                        <field id="enable_custom_labels_and_pricing">1</field>
+                    </depends>
+                </group>
+
                 <group id="courier_guy_RIN" type="text" sortOrder="4850" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy RIN: Fuel charge</label>
+                    <label>The Courier Guy - RIN</label>
                     <field id="shipping_label_name_RIN" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -887,7 +1021,7 @@
 
                 <group id="courier_guy_SDX" type="text" sortOrder="4900" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy SDX: Fuel charge</label>
+                    <label>The Courier Guy - SDX</label>
                     <field id="shipping_label_name_SDX" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
@@ -915,7 +1049,7 @@
 
                 <group id="courier_guy_SPX" type="text" sortOrder="4950" showInDefault="1" showInWebsite="1"
                        showInStore="1">
-                    <label>The Courier Guy SPX: Fuel charge</label>
+                    <label>The Courier Guy - SPX</label>
                     <field id="shipping_label_name_SPX" translate="label" type="text" sortOrder="500" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Shipping label name</label>
