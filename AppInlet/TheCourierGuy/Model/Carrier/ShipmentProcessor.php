@@ -14,20 +14,11 @@ use Magento\Sales\Api\Data\ShipmentTrackInterfaceFactory;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use AppInlet\TheCourierGuy\Helper\Data as Helper;
+use Psr\Log\LoggerInterface;
 use stdClass;
 
 class ShipmentProcessor
 {
-    private ShipmentRepositoryInterface $shipmentRepository;
-    private ShipmentTrackInterfaceFactory $trackFactory;
-    private Helper $helper;
-    private TCGQuote $tcgQuote;
-    private ApiPlug $apiPlug;
-    private Shiplogic $shipLogic;
-    private Filesystem $filesystem;
-    private DirectoryList $directoryList;
-    private ShipmentSender $shipmentSender;
-
     /**
      * @param ShipmentRepositoryInterface $shipmentRepository
      * @param ShipmentTrackInterfaceFactory $trackFactory
@@ -38,27 +29,20 @@ class ShipmentProcessor
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
      * @param ShipmentSender $shipmentSender
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        ShipmentRepositoryInterface $shipmentRepository,
-        ShipmentTrackInterfaceFactory $trackFactory,
-        Helper $helper,
-        Shiplogic $shipLogic,
-        TCGQuote $tcgQuote,
-        ApiPlug $apiPlug,
-        Filesystem $filesystem,
-        DirectoryList $directoryList,
-        ShipmentSender $shipmentSender
+        private ShipmentRepositoryInterface $shipmentRepository,
+        private ShipmentTrackInterfaceFactory $trackFactory,
+        private Helper $helper,
+        private Shiplogic $shipLogic,
+        private TCGQuote $tcgQuote,
+        private ApiPlug $apiPlug,
+        private Filesystem $filesystem,
+        private DirectoryList $directoryList,
+        private ShipmentSender $shipmentSender,
+        private LoggerInterface $logger
     ) {
-        $this->shipmentRepository = $shipmentRepository;
-        $this->trackFactory       = $trackFactory;
-        $this->helper             = $helper;
-        $this->tcgQuote           = $tcgQuote;
-        $this->apiPlug            = $apiPlug;
-        $this->shipLogic          = $shipLogic;
-        $this->filesystem         = $filesystem;
-        $this->directoryList      = $directoryList;
-        $this->shipmentSender     = $shipmentSender;
     }
 
     /**
@@ -72,7 +56,7 @@ class ShipmentProcessor
         $url = '';
         try {
             $url = $shiplogicApi->getShipmentLabel($shipmentId);
-            $url = json_decode($url)->url;
+            $url = json_decode((string)$url)->url;
         } catch (\Exception $exception) {
             $url = $exception->getMessage();
         }
@@ -104,7 +88,7 @@ class ShipmentProcessor
             $shipment->addTrack($track);
             $this->shipmentRepository->save($shipment);
         } catch (NoSuchEntityException $e) {
-            $this->monolog->error($e->getMessage());
+            $this->logger->error($e->getMessage());
         }
     }
 
@@ -148,8 +132,7 @@ class ShipmentProcessor
         $createShipmentBody->special_instructions_collection = '';
         $createShipmentBody->special_instructions_delivery   = '';
         $createShipmentBody->declared_value                  = $body['declared_value'];
-        $createShipmentBody->liability_cover                 = ($this->helper->isInsuranceEnabled(
-        ) && $body['declared_value'] > 0) ? 'Y' : 'N';
+        $createShipmentBody->liability_cover                 = ($this->helper->isInsuranceEnabled() && $body['declared_value'] > 0) ? 'Y' : 'N';
         $createShipmentBody->service_level_code              = $body['service_level_code'];
         $createShipmentBody->customer_reference              = $order->getIncrementId();
         if ($returnShipment) {
@@ -197,6 +180,48 @@ class ShipmentProcessor
             ['declared_value' => (float)$declaredValue]
         );
 
+        $getRatesBody = [
+            'sender'              => $body['sender'],
+            'receiver'            => $body['receiver'],
+            'declared_value'      => $body['declared_value'],
+            'collection_min_date' => $body['collection_min_date'],
+            'delivery_min_date'   => $body['delivery_min_date'],
+        ];
+        $parcels      = [];
+        foreach ($body['parcels'] as $index => $parcel) {
+            $par       = [
+                'key'      => $index,
+                'name'     => $parcel->submitted_description,
+                'quantity' => 1,
+                'weight'   => $parcel->submitted_weight_kg,
+                'length'   => $parcel->submitted_length_cm,
+                'width'    => $parcel->submitted_width_cm,
+                'height'   => $parcel->submitted_height_cm,
+            ];
+            $parcels[] = $par;
+        }
+        $getRatesBody['parcels']  = $parcels;
+        $getRatesBody['boxSizes'] = $this->apiPlug->gatherBoxSizes();
+        try {
+            $updatedRates = $this->shipLogic->getRates($getRatesBody);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            $updatedRates = ['rates' => []];
+        }
+
+        if (empty($updatedRates['rates'])) {
+            $this->logger->warning('No updated rates retrieved. Using original shipping method code.');
+        }
+        
+        $updatedRatesCodes = [];
+        foreach (($updatedRates['rates'] ?? []) as $rate) {
+            $updatedRatesCodes[] = $rate['service_level']['code'];
+        }
+
+        if (!empty($updatedRatesCodes) && !in_array($shippingMethodCode, $updatedRatesCodes, true)) {
+            $shippingMethodCode = $updatedRatesCodes[0];
+        }
+
         $body['service_level_code'] = $shippingMethodCode;
         $request_body               = $this->createShipmentBody($order, $body, $observerShipment === null);
         $response                   = $shipLogicApi->createShipment($request_body);
@@ -224,7 +249,7 @@ class ShipmentProcessor
                     $observerShipment->setEmailSent(true);
                 }
             } catch (\Exception $e) {
-                $this->helper->log($e->getMessage(), 'error');
+                $this->logger->error($e->getMessage());
             }
         }
         $order->save();

@@ -149,13 +149,7 @@ class ShipLogicApiPayload
         if (count($globalParcels) > 1) {
             usort(
                 $globalParcels,
-                function ($a, $b) {
-                    if ($a[0] === $b[0]) {
-                        return 0;
-                    }
-
-                    return ($a[0] < $b[0]) ? -1 : 1;
-                }
+                fn($a, $b) => $a[0] <=> $b[0]
             );
         }
 
@@ -230,11 +224,7 @@ class ShipLogicApiPayload
                     (int)$itemb['dimensions']['width'],
                     (int)$itemb['dimensions']['height']
                 );
-                if ($producta_size === $productb_size) {
-                    return 0;
-                }
-
-                return ($producta_size < $productb_size) ? 1 : -1;
+                return $productb_size <=> $producta_size;
             }
         );
 

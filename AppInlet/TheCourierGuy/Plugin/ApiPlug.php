@@ -13,25 +13,17 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiPlug
 {
-    private Curl $curl;
-    private Monolog $logger;
-    private Helper $helper;
     private string $email;
     private string $password;
-    private Shiplogic $shipLogic;
 
     public function __construct(
-        Helper $helper,
-        Monolog $logger,
-        Curl $curl,
-        Shiplogic $shipLogic
+        private Helper $helper,
+        private Monolog $logger,
+        private Curl $curl,
+        private Shiplogic $shipLogic
     ) {
-        $this->curl      = $curl;
-        $this->logger    = $logger;
-        $this->helper    = $helper;
         $this->email     = $this->helper->getConfig('account_number');
         $this->password  = $this->helper->getConfig('password');
-        $this->shipLogic = $shipLogic;
     }
 
     public function prepare_api_data($request, $itemsList, $quote, $reference, array $insuranceData = []): array

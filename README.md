@@ -1,6 +1,6 @@
 # TCG_Magento_2
 
-This is The Courier Guy module v1.5.1 for Magento v2.4.9.
+This is The Courier Guy module v1.6.0 for Magento v2.4.9.
 
 ## Installation
 

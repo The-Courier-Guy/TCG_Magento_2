@@ -6,17 +6,13 @@ use Magento\Quote\Api\Data\ShippingMethodExtensionFactory;
 
 class ShippingClasses
 {
-    protected ShippingMethodExtensionFactory $extensionFactory;
-
     /**
      * Description constructor.
      *
      * @param ShippingMethodExtensionFactory $extensionFactory
      */
-    public function __construct(
-        ShippingMethodExtensionFactory $extensionFactory
-    ) {
-        $this->extensionFactory = $extensionFactory;
+    public function __construct(protected ShippingMethodExtensionFactory $extensionFactory)
+    {
     }
 
     /**
@@ -28,10 +24,7 @@ class ShippingClasses
      */
     public function afterModelToDataObject($subject, $result, $rateModel): mixed
     {
-        $extensionAttribute = $result->getExtensionAttributes() ?
-            $result->getExtensionAttributes()
-            :
-            $this->extensionFactory->create();
+        $extensionAttribute = $result->getExtensionAttributes() ?: $this->extensionFactory->create();
         $extensionAttribute->setShippingclasses($rateModel->getShippingclasses());
         $result->setExtensionAttributes($extensionAttribute);
 

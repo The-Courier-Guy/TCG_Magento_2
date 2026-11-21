@@ -27,50 +27,24 @@ class Shipping extends AbstractCarrier implements CarrierInterface
 {
     protected string $code = 'appinlet_the_courier_guy';
 
-    protected ResultFactory $rateResultFactory;
-    protected MethodFactory $rateMethodFactory;
-    protected QuoteFactory $quoteFactory;
-    protected Quote $quoteModel;
-    protected ShipmentFactory $shipmentFactory;
-    protected Monolog $monolog;
-    protected ApiPlug $apiPlug;
-    protected Helper $helper;
-    protected Session $checkoutSession;
-    protected LoggerInterface $logger;
-    protected Cart $cart;
-    protected ProductRepositoryInterface $productRepo;
-
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ErrorFactory $rateErrorFactory,
-        LoggerInterface $logger,
-        ResultFactory $rateResultFactory,
-        MethodFactory $rateMethodFactory,
-        Helper $helper,
-        Monolog $monolog,
-        ApiPlug $apiPlug,
-        Cart $cart,
-        Session $checkoutSession,
-        ShipmentFactory $shipmentFactory,
-        QuoteFactory $quoteFactory,
-        Quote $quoteModel,
-        ProductRepositoryInterface $productRepo,
+        protected LoggerInterface $logger,
+        protected ResultFactory $rateResultFactory,
+        protected MethodFactory $rateMethodFactory,
+        protected Helper $helper,
+        protected Monolog $monolog,
+        protected ApiPlug $apiPlug,
+        protected Cart $cart,
+        protected Session $checkoutSession,
+        protected ShipmentFactory $shipmentFactory,
+        protected QuoteFactory $quoteFactory,
+        protected Quote $quoteModel,
+        protected ProductRepositoryInterface $productRepo,
         array $data = []
     ) {
-        $this->shipmentFactory   = $shipmentFactory;
-        $this->checkoutSession   = $checkoutSession;
-        $this->monolog           = $monolog;
-        $this->apiPlug           = $apiPlug;
-        $this->helper            = $helper;
-        $this->logger            = $logger;
-        $this->cart              = $cart;
-        $this->rateResultFactory = $rateResultFactory;
-        $this->rateMethodFactory = $rateMethodFactory;
-        $this->quoteFactory      = $quoteFactory;
-        $this->quoteModel        = $quoteModel;
-        $this->productRepo       = $productRepo;
-
-        parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
+        parent::__construct($scopeConfig, $rateErrorFactory, $this->logger, $data);
     }
 
     public function getAllowedMethods(): array

@@ -5,18 +5,11 @@ namespace AppInlet\TheCourierGuy\Plugin;
 class ShipLogicContentPayload
 {
 
-    private $parameters;
-    private $fittingItems;
-    private $globalParcels;
-
     private $r1;
     private $j;
 
-    public function __construct($parameters, $fittingItems, $globalParcels)
+    public function __construct(private $parameters, private $fittingItems, private $globalParcels)
     {
-        $this->parameters    = $parameters;
-        $this->fittingItems  = $fittingItems;
-        $this->globalParcels = $globalParcels;
         $this->r1            = ShipLogicApiPayload::$r1;
         $this->j             = ShipLogicApiPayload::$j;
     }
