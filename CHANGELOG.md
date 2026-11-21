@@ -1,10 +1,29 @@
 # Changelog
 
+## [1.6.0](https://github.com/The-Courier-Guy/TCG_Magento_2/releases/tag/v1.6.0)
+
+### Added
+
+- Introduced a configurable The Courier Guy API URL setting in the plugin configuration, 
+defaulting to https://api.portal.thecourierguy.co.za/ so merchants can override the endpoint for sandbox and
+development environments.
+- Validated the configurable API URL on save to require a well-formed HTTPS address.
+
+### Changed
+
+- Updated the module for compatibility with Magento 2.4.9 and PHP 8.5, including constructor property promotion,
+standardised exception handling, and related code quality improvements.
+ 
+### Improved
+
+- Revalidate shipping rates before shipment creation and automatically select a valid fallback service 
+level if the originally selected method is no longer available.
+
 ## [1.5.1](https://github.com/The-Courier-Guy/TCG_Magento_2/releases/tag/v1.5.1)
 
 ### Added
 
-- Added new courier service level codes: LPP, LPF, PRI, PRIR and LSP.
+- Added new courier service level codes: LPP, LFP, PRI, PRIR and LSP.
 
 ## [1.5.0](https://github.com/The-Courier-Guy/TCG_Magento_2/releases/tag/v1.5.0)
 

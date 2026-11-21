@@ -9,37 +9,7 @@ use stdClass;
 
 class Shiplogic extends Data
 {
-    public const API_BASE = 'https://api.portal.thecourierguy.co.za/v2/';
-
-    /**
-     * @var array<string, array{method: string, endPoint: string}>
-     * */
-    private array $apiMethods = [
-        'getRates'         => [
-            'method'   => 'POST',
-            'endPoint' => self::API_BASE . 'rates',
-        ],
-        'getOptInRates'    => [
-            'method'   => 'POST',
-            'endPoint' => self::API_BASE . 'rates/opt-in',
-        ],
-        'createShipment'   => [
-            'method'   => 'POST',
-            'endPoint' => self::API_BASE . 'shipments',
-        ],
-        'getShipments'     => [
-            'method'   => 'GET',
-            'endPoint' => self::API_BASE . 'shipments?tracking_ref=',
-        ],
-        'trackShipment'    => [
-            'method'   => 'GET',
-            'endPoint' => self::API_BASE . 'shipments?tracking_reference=',
-        ],
-        'getShipmentLabel' => [
-            'method'   => 'GET',
-            'endPoint' => self::API_BASE . 'shipments/label?id=',
-        ],
-    ];
+    public const API_BASE = 'https://api.portal.thecourierguy.co.za/';
 
     /**
      * Performs the shiplogic API request
@@ -54,6 +24,37 @@ class Shiplogic extends Data
     {
         $credentials = $this->getShipLogicCredentials();
         $apiKey      = $credentials['shiplogic_api_key'];
+        $apiBase     = $this->getConfig('shiplogic_api_url') ?: self::API_BASE;
+        if (!str_ends_with($apiBase, '/')) {
+            $apiBase .= '/';
+        }
+
+        $apiMethods = [
+        'getRates'         => [
+            'method'   => 'POST',
+            'endPoint' => $apiBase . 'rates',
+        ],
+        'getOptInRates'    => [
+            'method'   => 'POST',
+            'endPoint' => $apiBase . 'rates/opt-in',
+        ],
+        'createShipment'   => [
+            'method'   => 'POST',
+            'endPoint' => $apiBase . 'shipments',
+        ],
+        'getShipments'     => [
+            'method'   => 'GET',
+            'endPoint' => $apiBase . 'shipments?tracking_ref=',
+        ],
+        'trackShipment'    => [
+            'method'   => 'GET',
+            'endPoint' => $apiBase . 'shipments?tracking_reference=',
+        ],
+        'getShipmentLabel' => [
+            'method'   => 'GET',
+            'endPoint' => $apiBase . 'shipments/label?id=',
+        ],
+    ];
 
         $client  = new Client();
         $amzDate = date('Ymd\THis\Z');
@@ -63,8 +64,8 @@ class Shiplogic extends Data
             'Content-Type'  => 'application/json',
             'Authorization' => "Bearer $apiKey",
         ];
-        $method  = $this->apiMethods[$apiMethod]['method'];
-        $uri     = $this->apiMethods[$apiMethod]['endPoint'];
+        $method  = $apiMethods[$apiMethod]['method'];
+        $uri     = $apiMethods[$apiMethod]['endPoint'];
 
         if ($method === 'POST') {
             $request = new Request(
@@ -114,7 +115,7 @@ class Shiplogic extends Data
                 ['body' => json_encode($body)]
             );
             $optInRates = json_decode($optInRates, true);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $optInRates = [];
         }
         if (!empty($optInRates)) {
@@ -192,7 +193,7 @@ class Shiplogic extends Data
             $response = $this->makeAPIRequest('getRates', ['body' => json_encode($body)]);
 
             return json_decode($response, true);
-        } catch (Exception $ex) {
+        } catch (\Exception $exception) {
             return [];
         }
     }

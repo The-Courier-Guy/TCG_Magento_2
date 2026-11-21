@@ -15,7 +15,7 @@ class OrderShipped implements ObserverInterface
     private Helper $helper;
     private ShipmentProcessor $shipmentProcessor;
     private ManagerInterface $messageManager;
-
+    
     public function __construct(
         Helper $helper,
         ShipmentProcessor $shipmentProcessor,

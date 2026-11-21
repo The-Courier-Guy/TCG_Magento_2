@@ -10,15 +10,8 @@ use Magento\Framework\Setup\UninstallInterface;
 
 class Uninstall implements UninstallInterface
 {
-    public ScopeConfigInterface $configReader;
-    public WriterInterface $configWriter;
-
-    public function __construct(
-        ScopeConfigInterface $configReader,
-        WriterInterface $configWriter
-    ) {
-        $this->configReader = $configReader;
-        $this->configWriter = $configWriter;
+    public function __construct(public ScopeConfigInterface $configReader, public WriterInterface $configWriter)
+    {
     }
 
     /**

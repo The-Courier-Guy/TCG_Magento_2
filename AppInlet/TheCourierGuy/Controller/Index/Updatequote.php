@@ -2,7 +2,6 @@
 
 namespace AppInlet\TheCourierGuy\Controller\Index;
 
-use Exception;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Checkout\Model\Cart;
@@ -64,8 +63,8 @@ class Updatequote implements ActionInterface
             try {
                 $quote->save();
                 return $jsonResult->setData(['success' => true, 'message' => 'Place Post Success']);
-            } catch (Exception $ex) {
-                return $jsonResult->setData(['success' => false, 'message' => 'Place Post Failed']);
+            } catch (\Exception $e) {
+                return $jsonResult->setData(['success' => false, 'message' => 'Place Post Failed: ' . $e->getMessage()]);
             }
         }
 

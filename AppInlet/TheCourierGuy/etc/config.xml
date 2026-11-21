@@ -29,6 +29,7 @@
                 <flat_rate>100</flat_rate>
                 <post_quote_at_order_placed>0</post_quote_at_order_placed>
                 <model>AppInlet\TheCourierGuy\Model\Carrier\Shipping</model>
+                <shiplogic_api_url>https://api.portal.thecourierguy.co.za/</shiplogic_api_url>
             </appinlet_the_courier_guy>
         </carriers>
     </default>

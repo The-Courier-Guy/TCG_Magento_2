@@ -14,13 +14,7 @@ use AppInlet\TheCourierGuy\Plugin\ShipLogicApiPayload;
 
 class Data extends AbstractHelper
 {
-    public const string XML_PATH_CATALOG = 'carriers/';
-
-    protected WriterInterface $configWriter;
-    protected LoggerInterface $logger;
-    protected TypeListInterface $cacheTypeList;
-    protected Pool $cacheFrontendPool;
-    protected ShipLogicApiPayload $shipLogicApiPayload;
+    public const XML_PATH_CATALOG = 'carriers/';
 
     /**
      * Data constructor.
@@ -34,17 +28,12 @@ class Data extends AbstractHelper
      */
     public function __construct(
         Context $context,
-        WriterInterface $configWriter,
-        TypeListInterface $cacheTypeList,
-        Pool $cacheFrontendPool,
-        LoggerInterface $logger,
-        ShipLogicApiPayload $shipLogicApiPayload,
+        protected WriterInterface $configWriter,
+        protected TypeListInterface $cacheTypeList,
+        protected Pool $cacheFrontendPool,
+        protected LoggerInterface $logger,
+        protected ShipLogicApiPayload $shipLogicApiPayload,
     ) {
-        $this->configWriter        = $configWriter;
-        $this->cacheTypeList       = $cacheTypeList;
-        $this->cacheFrontendPool   = $cacheFrontendPool;
-        $this->logger              = $logger;
-        $this->shipLogicApiPayload = $shipLogicApiPayload;
         parent::__construct($context);
     }
 

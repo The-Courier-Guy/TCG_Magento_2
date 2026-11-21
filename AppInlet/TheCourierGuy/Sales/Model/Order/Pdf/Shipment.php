@@ -33,32 +33,18 @@ use Zend_Pdf_Style;
 class Shipment extends AbstractPdf
 {
     /**
-     * @var StoreManagerInterface
-     */
-    protected StoreManagerInterface $_storeManager;
-
-    /**
-     * @var ResolverInterface
-     */
-    protected ResolverInterface $_localeResolver;
-    private ApiPlug $apiPlug;
-    private Filesystem $fileSystem;
-    private ShipmentFactory $shipmentFactory;
-    private DirectoryList $directoryList;
-
-    /**
      * @param Data $paymentData
      * @param StringUtils $string
      * @param ScopeConfigInterface $scopeConfig
-     * @param Filesystem $filesystem
+     * @param Filesystem $fileSystem
      * @param Config $pdfConfig
      * @param Factory $pdfTotalFactory
      * @param ItemsFactory $pdfItemsFactory
      * @param TimezoneInterface $localeDate
      * @param StateInterface $inlineTranslation
      * @param Renderer $addressRenderer
-     * @param StoreManagerInterface $storeManager
-     * @param ResolverInterface $localeResolver
+     * @param StoreManagerInterface $_storeManager
+     * @param ResolverInterface $_localeResolver
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -67,31 +53,25 @@ class Shipment extends AbstractPdf
         Data $paymentData,
         StringUtils $string,
         ScopeConfigInterface $scopeConfig,
-        Filesystem $filesystem,
+        private Filesystem $fileSystem,
         Config $pdfConfig,
         Factory $pdfTotalFactory,
         ItemsFactory $pdfItemsFactory,
         TimezoneInterface $localeDate,
         StateInterface $inlineTranslation,
         Renderer $addressRenderer,
-        StoreManagerInterface $storeManager,
-        ResolverInterface $localeResolver,
-        DirectoryList $directoryList,
-        ShipmentFactory $shipmentFactory,
-        ApiPlug $apiPlug,
+        protected StoreManagerInterface $_storeManager,
+        protected ResolverInterface $_localeResolver,
+        private DirectoryList $directoryList,
+        private ShipmentFactory $shipmentFactory,
+        private ApiPlug $apiPlug,
         array $data = []
     ) {
-        $this->apiPlug         = $apiPlug;
-        $this->fileSystem      = $filesystem;
-        $this->shipmentFactory = $shipmentFactory;
-        $this->directoryList   = $directoryList;
-        $this->_storeManager   = $storeManager;
-        $this->_localeResolver = $localeResolver;
         parent::__construct(
             $paymentData,
             $string,
             $scopeConfig,
-            $filesystem,
+            $this->fileSystem,
             $pdfConfig,
             $pdfTotalFactory,
             $pdfItemsFactory,

@@ -13,27 +13,8 @@ use stdClass;
 class TCGQuote
 {
 
-    private ApiPlug $apiPlug;
-    private Monolog $monolog;
-    private Helper $helper;
-    private QuoteFactory $quoteFactory;
-    private ShipmentFactory $shipmentFactory;
-    private ShipLogicApiPayload $shipLogicApiPayload;
-
-    public function __construct(
-        ShipmentFactory $shipmentFactory,
-        ApiPlug $apiPlug,
-        Monolog $monolog,
-        Helper $helper,
-        QuoteFactory $quoteFactory,
-        ShipLogicApiPayload $shipLogicApiPayload,
-    ) {
-        $this->quoteFactory        = $quoteFactory;
-        $this->helper              = $helper;
-        $this->shipmentFactory     = $shipmentFactory;
-        $this->apiPlug             = $apiPlug;
-        $this->monolog             = $monolog;
-        $this->shipLogicApiPayload = $shipLogicApiPayload;
+    public function __construct(private ShipmentFactory $shipmentFactory, private ApiPlug $apiPlug, private Monolog $monolog, private Helper $helper, private QuoteFactory $quoteFactory, private ShipLogicApiPayload $shipLogicApiPayload)
+    {
     }
 
     /**
@@ -51,7 +32,7 @@ class TCGQuote
         $shippingMethod = $order->getShippingMethod();
         $this->monolog->info('In prepareQuote: Shipping method: ' . $shippingMethod);
 
-        if (strpos($shippingMethod, 'appinlet_the_courier_guy_') === 0) {
+        if (strpos((string)$shippingMethod, 'appinlet_the_courier_guy_') === 0) {
             $productData   = [];
             $packageItemId = 0;
 
@@ -154,10 +135,10 @@ class TCGQuote
 
     public function removeTrailingComma($string)
     {
-        $lastOccurrence = strrpos($string, ', ');
+        $lastOccurrence = strrpos((string) $string, ', ');
 
         if ($lastOccurrence !== false) {
-            return substr($string, 0, $lastOccurrence);
+            return substr((string) $string, 0, $lastOccurrence);
         } else {
             return $string;
         }

@@ -23,8 +23,6 @@ use Magento\Framework\Controller\Result\Redirect;
 
 class Index extends Order
 {
-    private ShipmentProcessor $shipmentProcessor;
-
     public function __construct(
         Action\Context $context,
         Registry $coreRegistry,
@@ -37,10 +35,9 @@ class Index extends Order
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
-        ShipmentProcessor $shipmentProcessor,
+        private ShipmentProcessor $shipmentProcessor,
     ) {
         $this->logger = $logger;
-        $this->shipmentProcessor = $shipmentProcessor;
         parent::__construct(
             $context,
             $coreRegistry,
@@ -63,12 +60,7 @@ class Index extends Order
             try {
                 $this->shipmentProcessor->buildShipment($order, null);
                 $this->messageManager->addSuccessMessage(__('Return TCG Shipment processed!'));
-            } catch (GuzzleException $e) {
-                $this->messageManager->addErrorMessage(
-                    __('We can\'t process your Return TCG Shipment request' . $e->getMessage())
-                );
-                $this->logger->critical($e);
-            } catch (FileSystemException $e){
+            } catch (GuzzleException|FileSystemException $e){
                 $this->messageManager->addErrorMessage(
                     __('We can\'t process your Return TCG Shipment request' . $e->getMessage())
                 );

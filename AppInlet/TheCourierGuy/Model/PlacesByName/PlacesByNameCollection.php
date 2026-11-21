@@ -46,15 +46,13 @@ class PlacesByNameCollection implements PlacesByNameInterface
 
         if (!isset($payload['place_name'])) {
             throw new LocalizedException(__('place name must be specified.'));
-
-            return json_encode(['error' => "place name must be specified."]);
         }
 
         $places = $this->apiPlug->getAllPlacesByName($payload['place_name']);
         if ($this->getConfig("disable_boxes_depot") == 1 && count($places) >= 1) {
             $replaceTerms = ['boxes', 'depot'];
             foreach ($places as $key => $place) {
-                $town = strtolower($place['town']);
+                $town = strtolower((string) $place['town']);
                 foreach ($replaceTerms as $term) {
                     if (str_contains($town, $term)) {
                         unset($places[$key]);
